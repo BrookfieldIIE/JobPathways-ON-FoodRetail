@@ -1,0 +1,33 @@
+library(data.table)
+library(tcR)
+library(foreign)
+library(readxl)
+library(BBmisc)
+
+
+skills <- as.data.table(read_excel("data_excel/Skills.xlsx"))
+names(skills) <- c("onet","title","element.id","element.name","scale.id","scale.name","data.value",
+                   "N","std.err","low.ci","up.ci","suppress","relevance","date","source")
+abilities <- as.data.table(read_excel("data_excel/Abilities.xlsx"))
+names(abilities) <- c("onet","title","element.id","element.name","scale.id","scale.name","data.value",
+                   "N","std.err","low.ci","up.ci","suppress","relevance","date","source")
+knowledge <- as.data.table(read_excel("data_excel/Knowledge.xlsx"))
+names(knowledge) <- c("onet","title","element.id","element.name","scale.id","scale.name","data.value",
+                   "N","std.err","low.ci","up.ci","suppress","relevance","date","source")
+work.activities <- as.data.table(read_excel("data_excel/Work Activities.xlsx"))
+names(work.activities) <- c("onet","title","element.id","element.name","scale.id","scale.name","data.value",
+                   "N","std.err","low.ci","up.ci","suppress","relevance","date","source")
+work.context <- as.data.table(read_excel("data_excel/Work Context.xlsx"))
+names(work.context) <- c("onet","title","element.id","element.name","scale.id","scale.name","category","data.value",
+                            "N","std.err","low.ci","up.ci","suppress","relevance","date","source")
+
+abilities <- abilities[,.(data.value = prod(data.value)),by=.(onet,title,element.id,element.name)]
+abilities[,data.value:=normalize(data.value)]
+knowledge <- knowledge[,.(data.value = prod(data.value)),by=.(onet,title,element.id,element.name)]
+knowledge[,data.value:=normalize(data.value)]
+skills <- skills[,.(data.value = prod(data.value)),by=.(onet,title,element.id,element.name)]
+skills[,data.value:=normalize(data.value)]
+work.activities <- work.activities[,.(data.value = prod(data.value)),by=.(onet,title,element.id,element.name)]
+work.activities[,data.value:=normalize(data.value)]
+work.context <- work.context[scale.id=="CX"]
+work.context[,data.value:=normalize(data.value)]
