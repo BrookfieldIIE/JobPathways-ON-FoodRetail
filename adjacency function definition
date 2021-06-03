@@ -1,0 +1,42 @@
+library(data.table)
+library(tcR)
+
+cosine_sim <- function(a, b) crossprod(a,b)/sqrt(crossprod(a)*crossprod(b))
+
+cosine.similarity <- function(start.occ,element){
+  if(element==""){
+    stop("No elements specified")
+  }
+  else{
+    #need to add check for invalid variable names
+    data <- data.table::copy(get(element))
+    data[,occ.marker:=0]
+    data[onet==start.occ,occ.marker:=1]
+    data[onet==start.occ & data.value<0,occ.marker:=-1]
+    data[,benchmark.value:=occ.marker*data.value]
+    data[,benchmark.value:=sum(occ.marker)*max(benchmark.value),by=element.id]
+    consolidated.data <- data[,cosine_sim(data.value,benchmark.value),by=.(onet,title)]
+    names(consolidated.data) <- c("onet","title",element)
+    return(consolidated.data)
+  }
+}
+
+full.similarity.jp2 <- function(start.occ){
+  abilities.cosine <- cosine.similarity(start.occ,"abilities")
+  skills.cosine <- cosine.similarity(start.occ,"skills")
+  knowledge.cosine <- cosine.similarity(start.occ,"knowledge")
+  work.activities.cosine <- cosine.similarity(start.occ,"work.activities")
+  work.context.cosine <- cosine.similarity(start.occ,"work.context")
+  setkey(abilities.cosine,onet)
+  setkey(skills.cosine,onet)
+  setkey(knowledge.cosine,onet)
+  setkey(work.activities.cosine,onet)
+  setkey(work.context.cosine,onet)
+  full.table <- abilities.cosine[skills.cosine,nomatch=0]
+  full.table <- full.table[knowledge.cosine,nomatch=0]
+  full.table <- full.table[work.activities.cosine,nomatch=0]
+  full.table <- full.table[work.context.cosine,nomatch=0]
+  full.table[,final.similarity:=1/5*abilities+1/5*skills+1/5*knowledge+1/5*work.activities+
+               1/5*work.context]
+  return(full.table[,.(onet,title,final.similarity)])
+}
