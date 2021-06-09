@@ -12,9 +12,9 @@ Using our existing crosswalk https://github.com/BrookfieldIIE/NOC_ONet_Crosswalk
 
 This code does not provide the ONET data, or the R code and data for the geographic and other data filters due in part to size, and in part to the ongoing updating of the the data we used, which is freely available and referenced in our reports. If you have questions about how that was done or how we accessed the data, please see our reports and if you have further questions, contact us at brookfield.institute@ryerson.ca. We are happy to explore ways to support your team on a cost-recovery basis.
 
-Food Retail Trends Report: [LINK]
-Pathways Report: [LINK]
-Playbook and Resources: [LINK]
+Food Retail Trends Report: https://brookfieldinstitute.ca/disruption-and-opportunity-in-ontarios-grocery-sector/
+Pathways Report: https://brookfieldinstitute.ca/mapping-job-transitions-for-ontario-food-retail-workers/
+Playbook and Resources: [Forthcoming]
 
 Below is a description of each document and its contents.--------
 
